@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mibuka.github.io/pc-winscore-com/sitemap.xml

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>捷报比分 · 赛事数据与即时比分卡片库</title>
+  <style>
+    /* 极简留白、窄正文、清晰层级、卡片式视觉 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f9fafb;
+      color: #1f2937;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .page-wrap {
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* 主视觉（hero）—— 极简卡片 */
+    .hero-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 2.5rem 2rem 2rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.04);
+      margin-bottom: 1.8rem;
+      transition: box-shadow 0.2s;
+    }
+
+    .hero-card:hover {
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.04);
+    }
+
+    .hero-card h1 {
+      font-size: 1.9rem;
+      font-weight: 550;
+      letter-spacing: -0.01em;
+      color: #111827;
+      line-height: 1.3;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-card .subhead {
+      font-size: 1rem;
+      color: #4b5563;
+      margin-bottom: 1.2rem;
+      border-left: 3px solid #2563eb;
+      padding-left: 0.8rem;
+    }
+
+    .hero-card p {
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-card a {
+      color: #2563eb;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(37, 99, 235, 0.2);
+      transition: border-color 0.2s;
+    }
+
+    .hero-card a:hover {
+      border-bottom-color: #2563eb;
+    }
+
+    /* 用途卡片网格 */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .info-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 1.5rem 1.2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03);
+      border: 1px solid #f1f3f5;
+      transition: box-shadow 0.2s, transform 0.15s;
+    }
+
+    .info-card:hover {
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
+      transform: translateY(-1px);
+    }
+
+    .info-card h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.4rem;
+      color: #1f2937;
+    }
+
+    .info-card .card-icon {
+      font-size: 1.5rem;
+      margin-right: 0.3rem;
+      opacity: 0.8;
+    }
+
+    .info-card p {
+      font-size: 0.9rem;
+      color: #4b5563;
+      line-height: 1.6;
+    }
+
+    /* 适合人群 —— 简述卡片列 */
+    .audience-section {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 1.8rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    .audience-section h2 {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #111827;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .audience-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.8rem;
+      list-style: none;
+    }
+
+    .audience-items li {
+      background: #f1f5f9;
+      padding: 0.25rem 0.8rem;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      color: #1e293b;
+      line-height: 1.8;
+    }
+
+    /* 自然链接段落 */
+    .context-text {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 1.6rem 2rem 1.8rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    .context-text p {
+      margin-bottom: 0.9rem;
+    }
+
+    .context-text a {
+      color: #2563eb;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(37, 99, 235, 0.25);
+    }
+
+    .context-text a:hover {
+      border-bottom-color: #1d4ed8;
+    }
+
+    /* FAQ 摘要卡片 (极简) */
+    .faq-summary {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 1.8rem;
+      border: 1px solid #eef1f4;
+    }
+
+    .faq-summary h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #111827;
+      margin-bottom: 0.7rem;
+    }
+
+    .faq-item {
+      display: flex;
+      flex-direction: column;
+      padding: 0.5rem 0;
+      border-bottom: 1px dashed #e2e6ea;
+    }
+
+    .faq-item:last-child {
+      border-bottom: none;
+    }
+
+    .faq-q {
+      font-weight: 450;
+      color: #1f2937;
+      font-size: 0.88rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .faq-a {
+      font-size: 0.82rem;
+      color: #4b5563;
+    }
+
+    /* 页脚 */
+    .footer-note {
+      text-align: left;
+      font-size: 0.78rem;
+      color: #6b7280;
+      border-top: 1px solid #e2e6ea;
+      padding-top: 1.2rem;
+      margin-top: 0.5rem;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #eef1f4;
+      margin: 0.8rem 0 1.2rem;
+    }
+
+    /* 响应式 */
+    @media (max-width: 500px) {
+      body {
+        padding: 1.2rem 0.8rem;
+      }
+      .hero-card h1 {
+        font-size: 1.5rem;
+      }
+      .hero-card {
+        padding: 1.8rem 1rem;
+      }
+      .audience-section, .context-text, .faq-summary {
+        padding: 1.2rem 1rem;
+      }
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- 主视觉卡片 -->
+  <div class="hero-card">
+    <h1>即时比分 · 赛事数据卡片</h1>
+    <div class="subhead">从日常查询到对照参考，用信息卡片的方式理解赛场</div>
+    <p>
+      无论是赛前查阅交锋记录，还是赛后复盘数据，<a href="https://pc-winscore.com">捷报比分</a>
+      提供了一种轻量的、卡片式的信息组织方式。每一场比赛、每一条数据都可以被快速定位、对照和延伸阅读。
+    </p>
+    <p>
+      这里没有繁杂的弹窗与信息过载，而是将比分、战绩、赛程等核心字段置于简洁的布局中，方便读者在查询时保持专注。
+    </p>
+  </div>
+
+  <!-- 用途卡片网格：四个方向 -->
+  <div class="card-grid">
+    <div class="info-card">
+      <h3><span class="card-icon">📊</span> 实时比分对照</h3>
+      <p>多场次同时进行时，卡片式布局能一目了然地比较进球、红黄牌与换人节点。</p>
+    </div>
+    <div class="info-card">
+      <h3><span class="card-icon">📅</span> 赛程与历史</h3>
+      <p>从过往五场交锋到近期状态，数据以卡片并列呈现，降低来回翻页的频率。</p>
+    </div>
+    <div class="info-card">
+      <h3><span class="card-icon">🧩</span> 延伸阅读</h3>
+      <p>每张卡片内嵌相关赛事背景、积分变化与纪录提示，便于快速延伸查阅。</p>
+    </div>
+    <div class="info-card">
+      <h3><span class="card-icon">📌</span> 自定义关注</h3>
+      <p>将常用联赛或球队标记为关注卡片组，下次访问时直接进入对照视图。</p>
+    </div>
+  </div>
+
+  <!-- 适合人群（标签化） -->
+  <div class="audience-section">
+    <h2>👥 适合这样的你</h2>
+    <ul class="audience-items">
+      <li>日常查看比分的爱好者</li>
+      <li>需要赛事数据做对照的分析者</li>
+      <li>习惯卡片式信息获取的用户</li>
+      <li>想减少信息干扰、专注赛果的读者</li>
+      <li>赛事编辑与内容创作者</li>
+    </ul>
+    <hr>
+    <p style="font-size:0.88rem; color:#4b5563; margin-top:0.2rem;">
+      如果你常在多个页面之间跳转比对数据，卡片式的信息结构或许能帮你节省一点时间。
+    </p>
+  </div>
+
+  <!-- 自然链接段落：非推销语气，强调阅读与承接 -->
+  <div class="context-text">
+    <p>
+      很多用户在查询比分时，往往还需要了解积分榜变化、射手榜数据以及下一轮对阵。
+      <a href="https://pc-winscore.com">捷报比分</a> 将这些信息以卡片单元的形式组织在一起，让对照变得和浏览一样自然。
+    </p>
+    <p>
+      从一场比赛出发，你可以在同一视域内看到主客队的近期走势、进球分布以及历史交锋记录，
+      而不需要反复切换页面。这种设计思路源于“信息卡片”的概念——每个卡片独立、完整，却又彼此关联。
+    </p>
+    <p>
+      如果你也习惯在查阅比分时顺便看看同联赛其他场次的进程，或者想快速回顾某个球队近五场的表现，这种卡片式目录会是一种轻量的选择。
+    </p>
+  </div>
+
+  <!-- FAQ 摘要（极简卡片） -->
+  <div class="faq-summary">
+    <h3>❓ 常见疑问</h3>
+    <div class="faq-item">
+      <span class="faq-q">卡片内的数据多久更新一次？</span>
+      <span class="faq-a">重要比赛通常延迟不超过一分钟，普通赛事会在进球或关键事件后及时刷新。</span>
+    </div>
+    <div class="faq-item">
+      <span class="faq-q">可以同时对比不同联赛的比分吗？</span>
+      <span class="faq-a">可以。通过自定义关注卡片组，你可以把不同联赛的比赛放在同一个对照视图里。</span>
+    </div>
+    <div class="faq-item">
+      <span class="faq-q">历史数据卡片能保存多久？</span>
+      <span class="faq-a">一般保留最近两个赛季的完整赛事数据，部分重点比赛会保留更长时间。</span>
+    </div>
+    <p style="margin-top:0.7rem; font-size:0.82rem; color:#6b7280;">
+      更多关于赛事数据卡片的使用方式，可以在浏览时直接体验。
+    </p>
+  </div>
+
+  <!-- 页脚 -->
+  <div class="footer-note">
+    <span>信息卡片式 · 专注对照与延伸阅读 · 数据来源于开放赛事统计</span>
+  </div>
+
+</div>
+</body>
+</html>
